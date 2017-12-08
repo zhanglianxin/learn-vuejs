@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <style>
+    </style>
+</head>
+<body class="container">
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+
+    <script src="https://cdn.bootcss.com/vue/2.5.3/vue.js"></script>
+    <!-- <script src="https://cdn.bootcss.com/vue/2.5.3/vue.min.js"></script> -->
+
+    <!-- <script src="https://lodash.com/vendor/cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script> -->
+
+    <!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script> -->
+    <!-- <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+
+    <!-- 表单输入绑定 -->
+
+    <div id="app-1">
+        <!-- 基础用法 -->
+        <!-- `v-model` 指令在表单控件元素上创建双向数据绑定。它会根据控件类型自动选取
+            控件类型自动选取正确的方法来更新元素。本质上是语法糖，它负责监听用户的输入
+            事件以更新数据，并特别处理一些极端的例子。 -->
+        <!-- 文本 -->
+        <input v-model="message" placeholder="edit me">
+        <p class="text-muted">Message is: <span class="text-info">{{ message }}</span></p>
+        <!-- 多行文本 -->
+        <span>Multiline message is：</span>
+        <p style="white-space: pre-line;">{{ message }}</p>
+        <textarea v-model="message" placeholder="add multiple lines"></textarea><br>
+        <!-- 复选框 -->
+        <input type="checkbox" id="checkbox" v-model="checked">
+        <label for="checkbox">{{ checked }}</label><br>
+        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+        <label for="jack">Jack</label>
+        <input type="checkbox" id="john" value="John" v-model="checkedNames">
+        <label for="john">John</label>
+        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+        <label for="mike">Mike</label><br>
+        <span>Checked names: {{ checkedNames }}</span><br>
+        <!-- 单选按钮 -->
+        <input type="radio" id="one" value="One" v-model="picked">
+        <label for="one">One</label>
+        <input type="radio" id="two" value="Two" v-model="picked">
+        <label for="two">Two</label><br>
+        <span>Picked: {{ picked }}</span><br>
+        <!-- 选择列表 -->
+        <select v-model="selected">
+            <option disabled value="">请选择</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select><br>
+        <span>Selected: {{ selected }}</span><br>
+        <select v-model="selected1" multiple style="width: 50px;">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select><br>
+        <span>Selected: {{ selected1 }}</span><br>
+        <!-- 动态选项，用 `v-for` 渲染 -->
+        <select v-model="selected2">
+            <option v-for="option in options" v-bind:value="option.value">{{ option.text }}</option>
+        </select><br>
+        <span>Selected: {{ selected2 }}</span><br>
+
+        <!-- 值绑定 -->
+        <!-- 对于单选按钮，复选框及选择列表选项，`v-model` 绑定的 value 通常是静态字符串，
+            对于复选框是逻辑值。 -->
+        <!-- 当选中时，`picked` 为字符串 "a" -->
+        <input type="radio" v-model="picked1" value="a">
+        <!-- `toggle` 为 true 或 false -->
+        <input type="checkbox" v-model="toggle">
+        <!-- 当选中时，`selected` 为字符串 "abc" -->
+        <select v-model="selected3">
+            <option value="abc">ABC</option>
+        </select><br>
+        <!-- 想绑定 value 到 Vue 实例的一个动态属性上，可以用 `v-bind` 实现，并且这个
+            动态属性的值可以不是字符串 -->
+        <!-- 当选中时，`picked` 为字符串 "a" -->
+        <input type="radio" v-model="picked1" v-bind:value="a" v-on:click="press1">
+        <!-- `toggle` 为 true 或 false -->
+        <input type="checkbox" v-model="toggle" v-bind:true-value="a"
+            v-bind:false-value="b" v-on:click="press2">
+        <!-- 当选中时，`selected` 为字符串 "abc" -->
+        <select v-model="selected3" v-on:click="press3">
+            <option v-bind:value="{ number: 'ABC' }">ABC</option>
+        </select>
+
+        <!-- 修饰符 -->
+        <!-- .lazy -->
+        <!-- 默认情况下，`v-model` 在 `input` 事件中同步输入框的值与数据，但可以添加
+            一个修饰符 `lazy`，从而转变为在 `change` 事件中同步。 -->
+        <!-- 在 "change" 而不是 "input" 事件中更新 -->
+        <input v-model.lazy="msg" v-on:change="change">
+        <!-- .number -->
+        <!-- 如果想自动将用户输入值转为 Number 类型，可以添加一个修饰符 `number` 给
+            `v-model` 来处理输入值。 -->
+        <input v-model.number="age" type="number" v-on:change="change">
+        <!-- .trim -->
+        <!-- 如果要自动过滤用户输入的首位空格，可以添加 `trim` 修饰符到 `v-model` 上
+            过滤输入。 -->
+        <input v-model.trim="msg" v-on:change="change">
+    </div>
+
+    <script>
+        let app1 = new Vue({
+            el: '#app-1',
+            data: {
+                message: '',
+                checked: false,
+                checkedNames: [],
+                picked: '',
+                picked1: '',
+                selected: '',
+                selected1: [],
+                selected2: 'A',
+                options: [
+                    {text: 'One', value: 'A'},
+                    {text: 'Two', value: 'B'},
+                    {text: 'Three', value: 'C'},
+                ],
+                toggle: true,
+                selected3: '',
+                a: 'true',
+                b: 'false',
+                /* split line */
+                msg: 'hello',
+                age: 21,
+            },
+            methods: {
+                press1() {
+                    console.log(this.picked1);
+                },
+                press2() {
+                    console.log(this.toggle);
+                },
+                press3() {
+                    console.log(this.selected3.number);
+                },
+                change(event) {
+                    console.log(event.target.value)
+                },
+            },
+        });
+    </script>
+</body>
+</html>

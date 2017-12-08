@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <style>
+    </style>
+</head>
+<body class="container">
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+
+    <script src="https://cdn.bootcss.com/vue/2.5.3/vue.js"></script>
+    <!-- <script src="https://cdn.bootcss.com/vue/2.5.3/vue.min.js"></script> -->
+
+    <!-- <script src="https://lodash.com/vendor/cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script> -->
+
+    <!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script> -->
+    <!-- <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+
+    <!-- 事件处理 -->
+
+    <!-- 监听事件 -->
+    <div id="app-1">
+        <button v-on:click="counter += 1" class="btn btn-default">Add 1</button>
+        <p class="text-muted">The button above has been clicked <span
+            class="text-info">{{ counter }}</span> times.</p>
+    </div>
+    <script>
+        let app1 = new Vue({
+            el: '#app-1',
+            data: {
+                counter: 0,
+            },
+        });
+    </script>
+
+    <!-- 事件处理方法 -->
+    <div id="app-2">
+        <button v-on:click="greet" class="btn btn-default">Greet</button>
+    </div>
+    <script>
+        let app2 = new Vue({
+            el: '#app-2',
+            data: {
+                name: 'Vue.js',
+            },
+            methods: {
+                greet: function (event) {
+                    console.log(`Hello ${this.name}!`);
+                    if (event) {
+                        console.log(`event.target.tagName: ${event.target.tagName}`);
+                    }
+                },
+            }
+        });
+    </script>
+
+    <!-- 内联处理器中的方法 -->
+    <div id="app-3">
+        <button v-on:click="say('hi')" class="btn btn-default">Say hi</button>
+
+        <button v-on:click="say('what')" class="btn btn-default">Say what</button>
+        <!-- 在内联语句处理器中访问原始的 DOM 事件 -->
+        <button v-on:click="warn('Form cannot be submitted yet.', $event)"
+            class="btn btn-default">Submit</button>
+    </div>
+    <script>
+        let app3 = new Vue({
+            el: '#app-3',
+            data: {
+            },
+            methods: {
+                say(message) {
+                    console.log(message);
+                },
+                warn(message, event) {
+                    if (event) {
+                        event.preventDefault();
+                        console.warn(message);
+                    }
+                }
+            }
+        });
+    </script>
+
+    <!-- 事件修饰符 -->
+    <!-- 方法只有纯粹的数据逻辑，而不是去处理 DOM 事件细节。 -->
+    <div id="app-4">
+        <!-- 阻止单击事件继续传播 -->
+        <div v-on:click.stop="doThis" class="btn btn-default">.stop</div>
+        <!-- 提交事件不再重载页面 -->
+        <form v-on:submit.prevent="onSubmit">
+            <button class="btn btn-default">.prevent</button>
+        </form>
+        <!-- 修饰符可以串联 -->
+        <div v-on:click.stop.prevent="doThat" class="btn btn-default">.stop.prevent</div>
+        <!-- 只有修饰符 -->
+        <form v-on:submit.prevent>
+            <button class="btn btn-default">.prevent</button>
+        </form>
+        <!-- 添加事件监听器时使用事件捕获模式 -->
+        <!-- 即内部元素触发的事件先在此处处理，然后才交由内部元素自身进行处理 -->
+        <div v-on:click.capture="doThis" class="text-primary">.capture <span
+            v-on:click="clk" class="bg-info">INNER ELEMENT</span></div>
+        <!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+        <!-- 即事件不是从内部元素出发的 -->
+        <div v-on:click.self="doThat" class="text-primary">.self <span
+            v-on:click="clk" class="bg-info">INNER ELEMENT</span></div>
+        <!-- 点击事件将只会触发一次 -->
+        <div v-on:click.once="doThis" class="btn btn-default">.once</div>
+    </div>
+    <script>
+        let app4 = new Vue({
+            el: '#app-4',
+            data: {},
+            methods: {
+                doThis(event) {
+                    console.log('DOTHIS', event.target);
+                },
+                onSubmit(event) {
+                    console.log('ONSUBMIT', event.target);
+                },
+                doThat(event) {
+                    console.log('DOTHAT', event.target);
+                },
+                clk(event) {
+                    console.log('CLK', event.target);
+                },
+            },
+        })
+    </script>
+
+    <!-- 按键修饰符 -->
+    <div id="app-5">
+        <input v-on:keyup.enter="press" class="btn btn-default"
+            value="keyup.enter" type="button">
+        <input v-on:keyup.tab="press" class="btn btn-default"
+            value="keyup.tab" type="button">
+        <input v-on:keyup.delete="press" class="btn btn-default"
+            value="keyup.delete" type="button">
+        <input v-on:keyup.esc="press" class="btn btn-default"
+            value="keyup.esc" type="button">
+        <input v-on:keyup.space="press" class="btn btn-default"
+            value="keyup.space" type="button">
+        <input v-on:keyup.up="press" class="btn btn-default"
+            value="keyup.up" type="button">
+        <input v-on:keyup.down="press" class="btn btn-default"
+            value="keyup.down" type="button">
+        <input v-on:keyup.left="press" class="btn btn-default"
+            value="keyup.left" type="button">
+        <input v-on:keyup.right="press" class="btn btn-default"
+            value="keyup.right" type="button">
+        <input v-on:keyup.f2="press" class="btn btn-default"
+            value="keyup.f2" type="button">
+        <input v-on:keyup.page-down="press" class="btn btn-default"
+            value="keyup.page-down" type="button">
+
+        <!-- 系统修饰键 -->
+        <input v-on:keyup.alt.67="press" class="btn btn-default"
+            value="Alt + C" type="button">
+        <input v-on:click.ctrl="press" class="btn btn-default"
+            value="Ctrl + Click" type="button">
+        <input v-on:click.ctrl.exact="press" class="btn btn-default"
+            value="ONLY Ctrl + Click" type="button">
+    </div>
+    <script>
+        // 通过全局 config.keyCodes 对象自定义按键修饰符别名
+        Vue.config.keyCodes.f2 = 113;
+        let app5 = new Vue({
+            el: '#app-5',
+            data: {
+                press(event) {
+                    console.log('PRESS', event.target);
+                    // event.target.form.submit();
+                },
+            },
+        });
+    </script>
+</body>
+</html>

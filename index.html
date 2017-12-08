@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <style>
+    </style>
+</head>
+<body class="container">
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+
+    <script src="https://cdn.bootcss.com/vue/2.5.3/vue.js"></script>
+    <!-- <script src="https://cdn.bootcss.com/vue/2.5.3/vue.min.js"></script> -->
+
+    <!-- <script src="https://lodash.com/vendor/cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script> -->
+
+    <!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script> -->
+    <!-- <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+
+    <div id="app-7">
+        <ol v-on:click="add">
+            <todo-item v-for="item in groceryList" v-bind:todo="item" v-bind:key="item.id"></todo-item>
+        </ol>
+    </div>
+
+    <div id="app-8">
+        <pre>{{ rawHtml }}</pre>
+        <div v-html="rawHtml"></div>
+    </div>
+
+    <div id="app-9">
+        <p>Original message: {{ message }}</p>
+        <p>Computed reversed message: {{ reversedMessage }} | {{ reversedMessage1 }}</p>
+    </div>
+
+    <div id="app-10">
+        <p>Ask a yes/no question:<input v-model="question"></p>
+        <p>{{ answer }}</p>
+    </div>
+
+    <div id="app-11" class="static">
+        <p v-bind:class="{active: isActive, 'text-danger': hasError}">There is some text.</p>
+        <p v-bind:class="classObject">There is another text.</p>
+        <p v-bind:class="classObject1">There is another text.</p>
+    </div>
+
+    <div id="app-12" class="static">
+        <p v-bind:class="[isActive? activeClass : '', errorClass]">There is some text.</p>
+        <!-- equivalent -->
+        <p v-bind:class="[{active: isActive}, errorClass]">There is some text.</p>
+        <my-component v-bind:class="{active: isActive}"></my-component>
+    </div>
+
+    <div id="app-13">
+        <p v-bind:style="{color: activeColor, 'font-size': fontSize + 'px'}">绑定内联样式</p>
+        <p v-bind:style="styleObject">直接绑定到一个样式对象</p>
+        <p v-bind:style="[baseStyles, overrideingStyles]">将多个样式对象应用到同一个元素上</p>
+        <p v-bind:style="autoprefix">自动侦测浏览器并添加相应的前缀</p>
+        <p :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }">多重值</p>
+    </div>
+
+    <script>
+        Vue.component('todo-item', {
+            props: ['todo'],
+            template: '<li>{{ todo.text }}</li>',
+        });
+
+        let app7 = new Vue({
+            el: '#app-7',
+            data: {
+                groceryList: [
+                    {id: 0, text: 'Java'},
+                    {id: 1, text: 'PHP'},
+                    {id: 2, text: 'Node.js'},
+                ],
+            },
+            methods: {
+                add: function () {
+                    let maxId = 0;
+                    for (let item of this.groceryList) {
+                        if (item.id > maxId) {
+                            maxId = item.id;
+                        }
+                    }
+                    this.groceryList.push({id: maxId, text: btoa(+ new Date() + '').substr(13, 5)});
+                },
+            },
+        });
+
+        let app8 = new Vue({
+            el: '#app-8',
+            data: {
+                rawHtml: '<select><option>0</option><option>1</option></select>',
+            },
+        });
+
+        let app9 = new Vue({
+            el: '#app-9',
+            data: {
+                message: 'Hello Vue.js'
+            },
+            computed: {
+                reversedMessage0: function () {
+                    return this.message.split('').reverse().join('');
+                },
+                reversedMessage: {
+                    get() {
+                        return this.message.split('').reverse().join('');
+                    },
+                    set(newValue) {
+                        this.message = newValue.split('').reverse().join('')
+                    },
+                },
+                reversedMessage1() {
+                    return 'Yes, you do it!';
+                },
+            }
+        });
+
+        let app10 = new Vue({
+            el: '#app-10',
+            data: {
+                question: '',
+                answer: 'I cannot give you an answer until you ask a question!',
+            },
+            watch: {
+                question: function () {
+                    console.log(this.answer);
+                    this.answer = 'Waiting for you to stop typing...';
+                    this.getAnswer();
+                },
+            },
+            methods: {
+                getAnswer: function () {
+                    setTimeout(() => {
+                        if (this.question.indexOf('?') === -1) {
+                            this.answer = 'Questions usually contain a question mark.';
+                            return;
+                        }
+
+                        this.answer = 'Thinking...';
+
+                        let url = 'http://45.77.100.225:9090/';
+
+                        /*fetch(url).then((response) => {
+                            return response.json();
+                        }).then((data) => {
+                            console.log(data.ip);
+                            this.answer = data.ip;
+                        }).catch((error) => {
+                            this.answer = 'Error! Could not reach the API. ' + error;
+                        });*/
+
+                        fetch(url).then(response => {
+                            response.json().then(data => {
+                                console.log(data.ip);
+                                this.answer = data.ip;
+                            });
+                        }).catch((error) => {
+                            this.answer = 'Error! Could not reach the API. ' + error;
+                        });
+                    }, 1000);
+                },
+            },
+        });
+
+        let app11 = new Vue({
+            el: '#app-11',
+            data: {
+                isActive: true,
+                hasError: false,
+                classObject: {
+                    active: true,
+                    'text-danger': true,
+                },
+                error: {
+                    type: 'fatal',
+                },
+            },
+            computed: {
+                classObject1: function () {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal',
+                    };
+                },
+            }
+        });
+
+        Vue.component('my-component', {
+            template: '<p class="foo bar">There is another text.</p>',
+        });
+
+        let app12 = new Vue({
+            el: '#app-12',
+            data: {
+                activeClass: 'active',
+                errorClass: 'text-danger',
+                isActive: true,
+            }
+        });
+
+        let app13 = new Vue({
+            el: '#app-13',
+            data: {
+                activeColor: 'red',
+                fontSize: 30,
+                styleObject: {
+                    color: 'red',
+                    'font-size': '13px',
+                },
+                baseStyles: {
+                    'background-color': 'darkcyan',
+                },
+                overrideingStyles: {
+                    color: 'yellow',
+                },
+                autoprefix: {
+                    color: 'blue',
+                    'font-size': '20px',
+                    'margin-start': '50px',
+                },
+            },
+        });
+    </script>
+
+    <!-- 条件渲染 -->
+    <div id="app-14">
+        <h1 v-if="ok">Yes</h1>
+        <h1 v-else>No</h1>
+        <!-- 最终的渲染结果将不包含 <template> 元素 -->
+        <template v-if="ok">
+            <h1>Title</h1>
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+        </template>
+        <div v-if="Math.random() > .5">
+            Now you see me
+        </div>
+        <div v-else>
+            Now you don't
+        </div>
+        <div v-if="type === 'A'">
+            A
+        </div>
+        <div v-else-if="type === 'B'">
+            B
+        </div>
+        <div v-else-if="type === 'C'">
+            C
+        </div>
+        <div v-else>
+            Not A/B/C
+        </div>
+
+        <!-- 用 key 管理可复用的元素，保证元素互相独立，不进行复用 -->
+        <div>
+            <template v-if="loginType === 'username'">
+                <label>Username</label>
+                <input placeholder="Enter your username" key="username-input">
+            </template>
+            <template v-else-if="loginType === 'email'">
+                <label>Email</label>
+                <input placeholder="Enter your email address" key="email-input">
+            </template>
+        </div>
+        <button v-on:click="toggleLoginType">Toggle login type</button>
+
+        <!-- 始终被渲染并保留在 DOM 中，只是简单地切换 display 属性 -->
+        <h1 v-show="ok">Hello!</h1>
+
+        <!-- `v-if` vs `v-show` -->
+        <!-- https://cn.vuejs.org/v2/guide/conditional.html#v-if-vs-v-show -->
+    </div>
+    <script>
+        let app14 = new Vue({
+            el: '#app-14',
+            data: {
+                ok: true,
+                type: 1,
+                loginType: 'username',
+            },
+            methods: {
+                toggleLoginType: function () {
+                    return this.loginType = this.loginType === 'username' ?
+                        'email' : 'username';
+                },
+            }
+        });
+    </script>
+
+    <!-- 列表渲染 -->
+    <div id="app-15">
+        <!-- 迭代数组 -->
+        <ul>
+            <!-- 迭代元素 -->
+            <li v-for="item in items">{{ item.message }}</li>
+        </ul>
+        <ul>
+            <!-- 第二个参数为当前项的索引 -->
+            <li v-for="(item, index) in items">{{ parentMessage }} - {{ index }} - {{ item.message }}</li>
+        </ul>
+        <!-- v-for...in v-for...of -->
+        <ul>
+            <li v-for="(item, index) of items">{{ parentMessage }} - {{ index }} - {{ item.message }}</li>
+        </ul>
+        <!-- 迭代对象 -->
+        <ul>
+            <!-- 仅迭代值 -->
+            <li v-for="value in obj">{{ value }}</li>
+        </ul>
+        <ul>
+            <!-- 迭代键值 -->
+            <li v-for="(value, key) in obj">{{ key }}: {{ value }}</li>
+        </ul>
+        <ul>
+            <!-- 第三个参数为当前项的索引 -->
+            <li v-for="(value, key, index) in obj">{{ index }}. {{ key }}: {{ value }}</li>
+        </ul>
+        <ul>
+            <!-- 尽可能在使用 `v-for` 时提供 `key`，除非遍历输出的 DOM 内容非常简单，
+                或者是刻意依赖默认行为以获取性能上的提升。 -->
+              <li v-for="(value, key, index) in obj" v-bind:key="key">{{ index }}. {{ key }}: {{ value }}</li>
+        </ul>
+        <!-- 数组更新检测 -->
+        <!-- 变异方法：Vue 包含一组观察数组的变异方法，所以它们也将会触发视图更新。 -->
+        <!-- push(), pop(), shift(), unshift(), splice(), sort(), reverse() -->
+        <!-- 变异方法：会改变被这些方法调用的原始数组。 -->
+        <!-- 非变异方法：不会改变原始数组，但总是返回一个新数组。 -->
+        <!-- 替换数组：filter(), concat(), slice() -->
+        <!-- Vue 为了使得 DOM 元素得到最大范围的重用而实现了一些智能的、启发式的方法，
+            所以用一个含有相同元素的数组去替换原来的数组是非常高效的操作 -->
+
+        <!-- 注意事项：由于 JavaScript 的限制，Vue 不能检测以下变动的数组 -->
+        <!-- 利用索引直接设置一个元素时，直接修改数组的长度时 -->
+        <!-- 为了解决第一类问题，以下两种方式可以实现相同的效果，同时也将触发状态更新： -->
+        <!-- Vue.set(app.items, indexOfItem, newValue) -->
+        <!-- app.items.splice(indexOfItem, 1, newValue) -->
+        <!-- 为了解决第二类问题，可以使用 splice() -->
+        <!-- app.items.splice(newLength) -->
+
+        <!-- 对象更改检测注意事项：Vue 不能检测对象属性的添加或删除。 -->
+        <!-- 对于已经创建的实例，Vue 不能动态添加根级别的响应式属性。
+            但是，可以使用 Vue.set(object, key, value) 方法向嵌套对象添加响应式属性。
+            还可以使用 `vm.$set()` 实例方法，它只是全局 Vue.set() 的别名。 -->
+
+        <!-- 显示过滤/排序结果 -->
+        <!-- 显示一个数组的过滤或排序副本，而不实际改变或重置原始数据。 -->
+        <ul>
+            <li v-for="n in evenNumbers">{{ n }}</li>
+        </ul>
+        <!-- 在计算属性不适用的情况下，可以使用一个 method 方法。 -->
+        <ul>
+            <li v-for="n in even(numbers)">{{ n }}</li>
+        </ul>
+        <!-- 一段取值范围的 v-for -->
+        <div>
+            <span v-for="n in 10">{{ n }} </span>
+        </div>
+        <!-- `v-for` on a `<template>` -->
+        <ul>
+            <template v-for="item in items">
+                <li>{{ item.message }}</li>
+            </template>
+        </ul>
+        <!-- `v-for` with `v-if` -->
+        <!-- 当处于同一节点，`v-for` 的优先级比 `v-if` 更高 -->
+        <ul>
+            <li v-for="todo in todos" v-if="!todo.isComplete">{{ todo }}</li>
+        </ul>
+        <ul v-if="todos.length">
+            <li v-for="todo in todos">{{ todo }}</li>
+        </ul>
+        <p v-else>No todos left!</p>
+    </div>
+    <script>
+        let app15 = new Vue({
+            el: '#app-15',
+            data: {
+                parentMessage: 'Parent',
+                items: [
+                    {message: 'Foo'},
+                    {message: 'Bar'},
+                ],
+                obj: {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    age: 30,
+                },
+                numbers: [1, 2, 3, 4, 5,],
+                todos: [
+                    {
+                        name: 'walking the dog',
+                        isComplete: true,
+                    }, {
+                        name: 'go shopping',
+                        isComplete: false,
+                    }
+                ],
+            },
+            computed: {
+                evenNumbers: function () {
+                    return this.numbers.filter(number => number % 2 === 0);
+                },
+            },
+            methods: {
+                even: numbers => {
+                    return numbers.filter(number => number % 2 === 0);
+                },
+            }
+        });
+        setTimeout(() => {
+            app15.obj = {
+                lastName: 'Doe',
+                firstName: 'John',
+                age: 30,
+            };
+
+            /* 使用非变异方法替换数组 */
+            app15.items = app15.items.filter(item => item.message.match(/Foo/));
+        }, 3000);
+    </script>
+
+    <!-- 一个组件的 `v-for` -->
+    <div id="todo-list-example">
+        <input v-model="newTodoText" v-on:keyup.enter="addNewTodo" placeholder="Add a todo">
+        <ul>
+            <li is="todo-item" v-for="(todo, index) in todos" v-bind:key="todo.id"
+                v-bind:title="todo.title" v-on:remove="todos.splice(index, 1)"></li>
+        </ul>
+    </div>
+    <script>
+        Vue.component('todo-item', {
+            props: ['title'],
+            template: `<li>{{ title }}<button v-on:click="$emit('remove')">&times;</button></li>`,
+        });
+        let app16 = new Vue({
+            el: '#todo-list-example',
+            data: {
+                newTodoText: '',
+                todos: [
+                    {
+                        id: 1,
+                        title: 'Do the dishes',
+                    }, {
+                        id: 2,
+                        title: 'Take out the trash',
+                    }, {
+                        id: 3,
+                        title: 'Mow the lawn',
+                    }
+                ],
+                nextTodoId: 4,
+            },
+            methods: {
+                addNewTodo: function () {
+                    this.todos.push({
+                        id: this.nextTodoId++,
+                        title: this.newTodoText,
+                    });
+                    this.newTodoText = '';
+                },
+            }
+        });
+    </script>
+</body>
+</html>
