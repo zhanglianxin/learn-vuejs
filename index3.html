@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet"> -->
+    <style>
+    </style>
+</head>
+<body class="container">
+    <!-- <script src="https://unpkg.com/vue"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+
+    <script src="https://cdn.bootcss.com/vue/2.5.3/vue.js"></script>
+    <!-- <script src="https://cdn.bootcss.com/vue/2.5.3/vue.min.js"></script> -->
+
+    <!-- <script src="https://lodash.com/vendor/cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script> -->
+
+    <!-- <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script> -->
+    <!-- <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+
+    <!-- 组件 -->
+
+    <!-- 使用组件 -->
+
+    <!-- 使用组件 - 全局注册 -->
+    <div id="example">
+        <my-component></my-component>
+    </div>
+    <script>
+        Vue.component('my-component', {
+            template: '<div>A custom component!</div>',
+        });
+
+        let app = new Vue({
+            el: '#example',
+        });
+    </script>
+    <!-- 使用组件 - 局部注册 -->
+    <div id="example1">
+        <my-component1></my-component1>
+    </div>
+    <script>
+        let child = {
+            template: '<div>A custom component!</div>',
+        };
+        let app1 = new Vue({
+            el: '#example1',
+            components: {
+                'my-component1': child,
+            },
+        });
+    </script>
+
+    <!-- 使用组件 - DOM 模板解析注意事项 -->
+    <!-- 当使用 DOM 作为模板时,会受到 HTML 本身的一些限制，因为 Vue 只在浏览器解析、
+        规范化之后才能获取其内容。像 `<ul>`、`<ol>`、`table`、`select` 这样的元素里
+        允许包含的元素有限制，而另一些像 <option> 这样的元素只能出现在某些特定元素
+        的内部。 -->
+    <!-- 变通方案是使用特殊的 is 特性 -->
+    <!-- 如果使用以下字符串模板，则没有限制：
+        * `<script type="text/x-template">`
+        * JavaScript 内联模板字符串
+        * `.vue` 组件
+        因此，请尽可能使用字符串模板 -->
+    <table id="tbl">
+        <tr is="my-row"></tr>
+    </table>
+    <script>
+        let rowTemplateObj = {
+            template: '<td>A custom component!</td>',
+        };
+        let app2 = new Vue({
+            el: '#tbl',
+            components: {
+                'my-row': rowTemplateObj,
+            },
+        });
+    </script>
+
+    <!-- 使用组件 - data 必须是函数 -->
+    <!-- 避免多个的组件共享一个对象 -->
+    <div id="example2">
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+    </div>
+    <script>
+        let data = {counter: 0};
+
+        Vue.component('simple-counter', {
+            template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+            // data: () => data, // X
+            data: () => {
+                return {counter: 0};
+            },
+        });
+
+        let example2 = new Vue({
+            el: '#example2',
+        });
+    </script>
+
+    <!-- 使用组件 - 组件组合 -->
+    <!-- 父子组件的关系可以总结为 **prop 向下传递，事件向上传递**。 -->
+    <!-- 父组件通过 prop 给子组件下发数据，子组件通过事件给父组件发送消息。 -->
+
+    <!-- Prop -->
+
+    <!-- Prop - 使用 Prop 传递数据 -->
+    <!-- 组件实例的作用域是孤立的。这意味着不能在子组件的模板内直接引用父组件的数据。
+        父组件的数据需要通过 prop 才能下发到子组件中。
+        子组件哟啊显示地用 props 选项声明它预期的数据。-->
+
+    <div id="prop-example-1">
+        <child message="hello!"></child>
+    </div>
+    <script>
+        /*Vue.component('child', {
+            props: ['message'],
+            template: '<span>{{ message }}</span>',
+        });*/
+
+        let propExample1 = new Vue({
+            el: '#prop-example-1',
+            components: {
+                child: {
+                    props: ['message'],
+                    template: '<span>{{ message }}</span>',
+                },
+            },
+        });
+    </script>
+</body>
+</html>
