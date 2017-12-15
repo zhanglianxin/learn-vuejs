@@ -21,6 +21,9 @@
         <!-- 传递外部参数 --><!-- 传递自动创建的事件对象 $event -->
         <button v-on:click="increaseByStep(2, $event)">Click me</button>
         <p>{{ counter }}</p>
+        <!-- 在模板里面写 JavaScript 表达式 -->
+        <p>coounter * 2 = {{ counter * 2 }}</p>
+        <p>counter > 10 ? {{ counter > 10 ? 'Yes' : 'No' }}</p>
         <!-- 监听事件，获取事件相关数据 -->
         <p v-on:mousemove="updateCoodinates">
             Coordinates: {{ x }} / {{ y }} - <span v-on:mousemove="dummy">DEAD SPOT</span>

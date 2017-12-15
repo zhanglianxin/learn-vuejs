@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <div id="app">
+        <!-- 使用双向绑定 https://cn.vuejs.org/v2/guide/forms.html -->
+        <input type="text" v-model="name">
+        <p>{{ name }}</p>
+
+        <!-- 使用计算属性 -->
+        <!-- 当普通属性发生改变时，依赖该属性的计算属性的绑定也会更新。 -->
+        <!-- 可以将同一函数定义为一个方法而不是一个计算属性。
+            两种方式的最终结果确实是完全相同的。
+            不同的是**计算属性是基于它们的依赖进行缓存的**。
+            计算属性只有在它的相关依赖发生改变时才会重新求值。
+            相比之下，每当触发重新渲染时，调用方法将**总会**再次执行函数。
+            如果不希望有缓存，请用方法来代替。 -->
+        <button v-on:click="counter++">Increase</button>
+        <button v-on:click="counter--">Decrease</button>
+        <!-- 改变 secondCouter 的值，触发重新渲染，由于 counter 的值没有改变，
+            所以函数 result() 会执行，而计算属性 output 不会重新求值。 -->
+        <button v-on:click="secondCounter++">Increase Second</button>
+        <p>Couter: {{ counter }} | {{ secondCounter }}</p>
+        <p>Result: {{ result() }} | {{ output }}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+
+            data: {
+                name: 'Shinn',
+                counter: 0,
+                secondCounter: 0,
+            },
+
+            computed: {
+                output() {
+                    console.log('Computed');
+
+                    return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5';
+                },
+            },
+
+            methods: {
+                result() {
+                    console.log("Methods");
+
+                    return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5';
+                },
+            },
+        });
+    </script>
+</body>
+</html>
