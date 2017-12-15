@@ -16,6 +16,19 @@
         <p>{{ title }} {{ sayHello() }}- <a v-bind:href="link">Google</a></p>
         <!-- 原始 HTML -->
         <p v-html="finishedLink"></p>
+        <!-- 监听事件 -->
+        <button v-on:click="increase">Click me</button>
+        <!-- 传递外部参数 --><!-- 传递自动创建的事件对象 $event -->
+        <button v-on:click="increaseByStep(2, $event)">Click me</button>
+        <p>{{ counter }}</p>
+        <!-- 监听事件，获取事件相关数据 -->
+        <p v-on:mousemove="updateCoodinates">
+            Coordinates: {{ x }} / {{ y }} - <span v-on:mousemove="dummy">DEAD SPOT</span>
+            <!-- 使用事件修饰符 .stop 修改事件行为 -->
+            <span v-on:mousemove.stop="">DEAD SPOT</span>
+        </p>
+        <!-- 监听按键事件，使用按键修饰符 -->
+        <input type="text" v-on:keyup.enter.space="logKeyup">
     </div>
 
     <script>
@@ -26,6 +39,9 @@
                 title: 'Hello Vue.js!',
                 link: 'https://google.com/',
                 finishedLink: '<a href="https://goole.com/">Google</a>',
+                counter: 0,
+                x: 0,
+                y: 0,
             },
 
             methods: {
@@ -35,6 +51,28 @@
 
                 changeTitle(event) {
                     this.title = event.target.value;
+                },
+
+                increase() {
+                    this.counter++;
+                },
+
+                increaseByStep(step = 1, event) {
+                    console.log(event);
+                    this.counter += step;
+                },
+
+                updateCoodinates(event) {
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                },
+
+                dummy(event) {
+                    event.stopPropagation();
+                },
+
+                logKeyup(event) {
+                    console.log(`U pressed ${event.code}`);
                 },
             },
         });
