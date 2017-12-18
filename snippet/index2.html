@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        .demo {
+            width: 100px;
+            height: 100px;
+            background-color: gray;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+    <div id="app">
+        <!-- 绑定 HTML Class -->
+
+        <!-- 对象语法 -->
+        <div class="demo" v-bind:class="{red: attachRed, blue: !attachRed}"
+            v-on:click="attachRed = !attachRed"></div>
+        <!-- 使用计算属性代替对象语法 -->
+        <!-- <div class="demo" v-bind:class="divClasses"
+            v-on:click="attachRed = !attachRed"></div> -->
+        <div class="demo" v-bind:class="{red: attachRed}"></div>
+        <!-- 数组语法 -->
+        <div class="demo" v-bind:class="[color, {red: attachRed}]"></div>
+        <hr>
+        <input type="text" v-model="color">
+    </div>
+
+    <div id="app1">
+        <!-- 绑定内联样式 -->
+
+        <!-- 对象语法 -->
+        <div class="demo" v-bind:style="{backgroundColor: color}"></div>
+        <!-- 使用计算属性 -->
+        <div class="demo" v-bind:style="myStyle"></div>
+        <!-- 数组语法 -->
+        <div class="demo" v-bind:style="[myStyle, {height: width + 'px'}]"></div>
+        <hr>
+        <input type="text" v-model="color">
+        <input type="number" v-model="width">
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+
+            data: {
+                attachRed: false,
+                color: 'green',
+            },
+
+            computed: {
+                divClasses() {
+                    return {
+                        rea: this.attachRed,
+                        blue: !this.attachRed,
+                    };
+                },
+            },
+        });
+
+        new Vue({
+            el: '#app1',
+
+            data: {
+                color: 'gray',
+                width: 100,
+            },
+
+            computed: {
+                myStyle() {
+                    return {
+                        backgroundColor: this.color,
+                        width: this.width + 'px',
+                    };
+                },
+            },
+        });
+    </script>
+</body>
+</html>
