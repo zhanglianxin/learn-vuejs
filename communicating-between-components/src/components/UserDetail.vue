@@ -3,6 +3,7 @@
         <h3>You may view the User Details here</h3>
         <p>Many Details</p>
         <p>User Name: {{ switchName() }}</p>
+        <button v-on:click="resetName">Reset Name</button>
     </div>
 </template>
 
@@ -15,6 +16,18 @@
         methods: {
             switchName() {
                 return this.myName.split('').reverse().join('');
+            },
+
+            resetName() {
+                /*
+                 * Avoid mutating a prop directly since the value will be overwritten
+                 * whenever the parent component re-renders. Instead, use a data or
+                 * computed property based on the prop's value.
+                 */
+                // this.myName = 'Max'; // X
+                // this.$emit('nameWasReset', this.myName);
+                let myName = 'Max';
+                this.$emit('nameWasReset', myName);
             },
         },
     };
