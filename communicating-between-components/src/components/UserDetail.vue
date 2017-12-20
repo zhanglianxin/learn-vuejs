@@ -4,6 +4,7 @@
         <p>Many Details</p>
         <p>User Name: {{ switchName() }}</p>
         <button v-on:click="resetName">Reset Name</button>
+        <button v-on:click="resetFn()">Reset Name</button>
     </div>
 </template>
 
@@ -11,6 +12,7 @@
     export default {
         props: {
             myName: String,
+            resetFn: Function,
         },
 
         methods: {
