@@ -6,7 +6,9 @@
                     <!-- 父组件模板的内容在父组件作用域内编译，
                         子组件模板的内容在子组件作用域内编译。 -->
                     <h2 slot="title">{{ quoteTitle }}</h2>
-                    <p>A Wonderful Quote!</p>
+                    <!-- will be treat as the default content of slots,
+                        unnamed slots will use it -->
+                    <p>Without a <code>slot</code> attribute</p>
                     <p slot="content">A Wonderful Quote!</p>
                 </app-quote>
             </div>

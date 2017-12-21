@@ -7,6 +7,10 @@
         <div>
             <slot name="content"></slot>
         </div>
+        <div>
+            <!-- unnamed slot == default slot -->
+            <slot></slot>
+        </div>
     </div>
 </template>
 
