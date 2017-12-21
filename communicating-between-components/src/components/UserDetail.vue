@@ -3,16 +3,25 @@
         <h3>You may view the User Details here</h3>
         <p>Many Details</p>
         <p>User Name: {{ switchName() }}</p>
+        <p>User Age: {{ userAge }}</p>
         <button v-on:click="resetName">Reset Name</button>
         <button v-on:click="resetFn()">Reset Name</button>
     </div>
 </template>
 
 <script>
+    import {eventBus} from '../main.js';
+
     export default {
         props: {
             myName: String,
             resetFn: Function,
+        },
+
+        data() {
+            return {
+                userAge: 27,
+            };
         },
 
         methods: {
@@ -31,6 +40,12 @@
                 let myName = 'Max';
                 this.$emit('nameWasReset', myName);
             },
+        },
+
+        created() {
+            eventBus.$on('ageWasEdited', (age) => {
+                this.userAge = age;
+            });
         },
     };
 </script>
