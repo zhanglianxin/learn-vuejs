@@ -17,4 +17,9 @@
         margin: 30px auto;
         text-align: center;
     }
+
+    /* The styling is set up on the child component */
+    h2 {
+        color: red;
+    }
 </style>
