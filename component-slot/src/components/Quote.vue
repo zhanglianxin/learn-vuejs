@@ -2,6 +2,11 @@
     <div>
         <div class="title">
             <slot name="title"></slot>
+            <!-- fallback content -->
+            <!-- Fallback content is compiled in the child scope and will only
+                be displayed if the hosting element is empty and has no content
+                to be inserted. -->
+            <span><slot name="subtitle">The Subtitle</slot></span>
         </div>
         <hr>
         <div>
@@ -35,5 +40,9 @@
 
     .title {
         font-style: italic;
+    }
+
+    .title > span {
+        color: #ccc;
     }
 </style>
