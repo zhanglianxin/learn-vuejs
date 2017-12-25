@@ -57,6 +57,8 @@
                 this.$http.get(url).then((response) => {
                     return response.json();
                 }).then((data) => {
+                    console.log('Result data:', data);
+
                     const resultArray = [];
                     for (let key in data) {
                         resultArray.push(data[key]);
