@@ -13,6 +13,8 @@
                 </div>
                 <button class="btn btn-primary" v-on:click="submit">Submit</button>
                 <hr>
+                <input class="form-control" type="text" v-model="node"></input>
+                <br><br>
                 <button class="btn btn-primary" v-on:click="fetchData">Get Data</button>
                 <br><br>
                 <ul class="list-group">
@@ -37,6 +39,8 @@
                 users: [],
 
                 resource: {},
+
+                node: 'data',
             };
         },
 
@@ -55,7 +59,19 @@
 
             // Send a GET request
             fetchData() {
-                this.$http.get('data.json').then((response) => {
+                // this.$http.get('data.json').then((response) => {
+                //     return response.json();
+                // }).then((data) => {
+                //     console.log('Result data:', data);
+
+                //     const resultArray = [];
+                //     for (let key in data) {
+                //         resultArray.push(data[key]);
+                //     }
+                //     this.users = resultArray;
+                // });
+
+                this.resource.getData({node: this.node}).then((response) => {
                     return response.json();
                 }).then((data) => {
                     console.log('Result data:', data);
@@ -75,9 +91,12 @@
                     method: 'POST',
                     url: 'alternative.json',
                 },
+                getData: {
+                    method: 'GET',
+                },
             };
             // https://github.com/pagekit/vue-resource/blob/develop/docs/resource.md
-            this.resource = this.$resource('data.json', {}, customActions);
+            this.resource = this.$resource('{node}.json', {}, customActions);
         },
     };
 </script>
