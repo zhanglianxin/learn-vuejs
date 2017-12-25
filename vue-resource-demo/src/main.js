@@ -5,7 +5,7 @@ import App from './App.vue';
 Vue.use(VueResource);
 
 // Configuring vue-resource globally
-Vue.http.options.root = 'https://vuejs-http-c5c84.firebaseio.com/data.json';
+Vue.http.options.root = 'https://vuejs-http-c5c84.firebaseio.com/';
 
 // Intercepting requests
 Vue.http.interceptors.push((request, next) => {

@@ -35,26 +35,27 @@
                 },
 
                 users: [],
+
+                resource: {},
             };
         },
 
         methods: {
             // Send a POST request
             submit() {
-                let url = 'https://vuejs-http-c5c84.firebaseio.com/data.json';
+                // this.$http.post('data.json', this.user).then((response) => {
+                //     console.log(response);
+                // }, (error) => {
+                //     console.log(error);
+                // });
 
-                this.$http.post(url, this.user).then((response) => {
-                    console.log(response);
-                }, (error) => {
-                    console.log(error);
-                });
+                // this.resource.save({}, this.user);
+                this.resource.saveAlt(this.user);
             },
 
             // Send a GET request
             fetchData() {
-                let url = 'https://vuejs-http-c5c84.firebaseio.com/data.json';
-
-                this.$http.get(url).then((response) => {
+                this.$http.get('data.json').then((response) => {
                     return response.json();
                 }).then((data) => {
                     console.log('Result data:', data);
@@ -66,6 +67,17 @@
                     this.users = resultArray;
                 });
             },
+        },
+
+        created() {
+            const customActions = {
+                saveAlt: {
+                    method: 'POST',
+                    url: 'alternative.json',
+                },
+            };
+            // https://github.com/pagekit/vue-resource/blob/develop/docs/resource.md
+            this.resource = this.$resource('data.json', {}, customActions);
         },
     };
 </script>
