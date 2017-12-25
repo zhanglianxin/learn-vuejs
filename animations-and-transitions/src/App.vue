@@ -24,6 +24,10 @@
                     leave-active-class="animated shake">
                     <div class="alert alert-info" v-if="show">This is some Info</div>
                 </transition>
+                <transition v-bind:name="alertAnimation" mode="out-in">
+                    <div class="alert alert-info" v-if="show" key="info">This is some Info</div>
+                    <div class="alert alert-warning" v-else key="warning">This is some Warning</div>
+                </transition>
             </div>
         </div>
     </div>
