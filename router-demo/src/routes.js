@@ -32,5 +32,13 @@ export const routes = [
                 name: 'userEdit',
             },
         ],
+    }, {
+        path: '/redirect-me',
+        redirect: {
+            name: 'home',
+        },
+    }, {
+        path: '*',
+        redirect: '/',
     },
 ];
