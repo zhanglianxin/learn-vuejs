@@ -8,5 +8,6 @@ export const routes = [
     }, {
         path: '/user/:id',
         component: User,
+        props: true,
     }
 ];
