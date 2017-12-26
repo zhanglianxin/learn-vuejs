@@ -22,6 +22,12 @@ const router = new VueRouter({
     },
 });
 
+// Global guards
+router.beforeEach((to, from, next) => {
+    console.log('global beforeEach');
+    next();
+});
+
 new Vue({
   el: '#app',
   router,

@@ -26,6 +26,11 @@ export const routes = [
             }, {
                 path: ':id',
                 component: UserDetail,
+                // Per-route guard
+                beforeEnter: (to, from, next) => {
+                    console.log('inside route setup');
+                    next();
+                },
             }, {
                 path: ':id/edit',
                 component: UserEdit,
