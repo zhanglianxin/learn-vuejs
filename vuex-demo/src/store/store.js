@@ -2,6 +2,10 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import counter from './modules/counter';
 
+import * as actions from './actions';
+import * as getters from './getters';
+import * as mutations from './mutations';
+
 Vue.use(Vuex);
 
 
@@ -10,24 +14,11 @@ export const store = new Vuex.Store({
         value: 0,
     },
 
-    getters: {
-        value(state) {
-            return state.value;
-        },
-    },
+    getters,
 
-    mutations: {
-        updateValue(state, payload) {
-            state.value = payload;
-        },
-    },
+    mutations,
 
-    actions: {
-        updateValue({ commit }, payload) {
-            console.log('actions: updateValue');
-            commit('updateValue', payload);
-        },
-    },
+    actions,
 
     modules: {
         counter,
