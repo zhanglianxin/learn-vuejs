@@ -8,6 +8,9 @@
                 <hr>
                 <app-counter></app-counter>
                 <app-another-counter></app-another-counter>
+                <hr>
+                <input type="text" v-model="value">
+                <p>{{ value }}</p>
             </div>
         </div>
     </div>
@@ -25,6 +28,17 @@
             appAnotherCounter: AnotherCounter,
             appResult: Result,
             appAnotherResult: AnotherResult,
+        },
+
+        computed: {
+            value: {
+                get() {
+                    return this.$store.getters.value;
+                },
+                set(value) {
+                    this.$store.dispatch('updateValue', value);
+                },
+            },
         },
     };
 </script>
