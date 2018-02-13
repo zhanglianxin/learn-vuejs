@@ -54,14 +54,18 @@
             <div
                     class="input"
                     v-for="(hobbyInput, index) in hobbyInputs"
+                    v-bind:class="{ invalid: $v.hobbyInputs.$each[index].$error }"
                     :key="hobbyInput.id">
               <label :for="hobbyInput.id">Hobby #{{ index }}</label>
               <input
                       type="text"
                       :id="hobbyInput.id"
+                      v-bind:blur="$v.hobbyInputs.$each[index].value.$touch()"
                       v-model="hobbyInput.value">
               <button @click="onDeleteHobby(hobbyInput.id)" type="button">X</button>
             </div>
+            <p v-if="!$v.hobbyInputs.minLen">You have to specify at least {{ $v.hobbyInputs.$params.minLen.min }} hobbies.</p>
+            <p v-if="!$v.hobbyInputs.required">Please add hobbies.</p>
           </div>
         </div>
         <div class="input inline" v-bind:class="{ invalid: $v.terms.$invalid }">
@@ -115,6 +119,16 @@
       },
       terms: {
         required: requiredUnless(vm => vm.country === 'germany')
+      },
+      hobbyInputs: {
+        required,
+        minLen: minLength(2),
+        $each: {
+          value: {
+            required,
+            minLen: minLength(5)
+          }
+        }
       }
     },
     methods: {
