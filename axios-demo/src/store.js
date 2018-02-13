@@ -30,7 +30,7 @@ export default new Vuex.Store({
     setLogoutTimer({ commit, dispatch }, expirationTime) {
       setTimeout(() => {
         dispatch('logout')
-      }, expirationTime)
+      }, expirationTime * 1000)
     },
     signup({ commit, dispatch }, authData) {
       const API_KEY = 'AIzaSyB3y9t_2TIPq59zmrTdbkV13Y6ZrhBnEgw'
@@ -45,6 +45,11 @@ export default new Vuex.Store({
             token: res.data.idToken,
             userId: res.data.localId
           })
+          const now = new Date()
+          const expirationDate = new Date(+ now + res.data.expiresIn * 1000)
+          localStorage.setItem('token', res.data.idToken)
+          localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('expirationDate', expirationDate)
           dispatch('storeUser', authData)
           dispatch('setLogoutTimer', res.data.expiresIn)
         })
@@ -63,11 +68,34 @@ export default new Vuex.Store({
             token: res.data.idToken,
             userId: res.data.localId
           })
+          const now = new Date()
+          const expirationDate = new Date(+ now + res.data.expiresIn * 1000)
+          localStorage.setItem('token', res.data.idToken)
+          localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('expirationDate', expirationDate)
           dispatch('setLogoutTimer', res.data.expiresIn)
         })
         .catch(error => console.log(error))
     },
+    tryAutoLogin({ commit }) {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        return
+      }
+      const expirationDate = localStorage.getItem('expirationDate')
+      if ((new Date()) >= expirationDate) {
+        return
+      }
+      const userId = localStorage.getItem('userId')
+      commit('authUser', {
+        token,
+        userId
+      })
+    },
     logout({ commit }) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('expirationDate')
       commit('clearAuthData')
       router.replace('/signin')
     },
