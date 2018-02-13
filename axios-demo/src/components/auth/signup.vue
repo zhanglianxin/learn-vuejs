@@ -7,6 +7,7 @@
           <input
                   type="email"
                   id="email"
+                  v-on:input="$v.email.$touch()"
                   v-model="email">
         </div>
         <div class="input">
@@ -69,6 +70,8 @@
 </template>
 
 <script>
+  import { required, email } from 'vuelidate/lib/validators'
+
   export default {
     data () {
       return {
@@ -79,6 +82,12 @@
         country: 'usa',
         hobbyInputs: [],
         terms: false
+      }
+    },
+    validations: {
+      email: {
+        required,
+        email
       }
     },
     methods: {
