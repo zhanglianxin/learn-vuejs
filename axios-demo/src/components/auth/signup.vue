@@ -22,18 +22,20 @@
           <p v-if="!$v.age.minVal">You have to be at least {{ $v.age.$params.minVal.min }} years old.</p>
           <p v-if="!$v.age.numeric">Your age must be an integer.</p>
         </div>
-        <div class="input">
+        <div class="input" v-bind:class="{ invalid: $v.password.$error }">
           <label for="password">Password</label>
           <input
                   type="password"
                   id="password"
+                  v-on:blur="$v.password.$touch()"
                   v-model="password">
         </div>
-        <div class="input">
+        <div class="input" v-bind:class="{ invalid: $v.confirmPassword.$error }">
           <label for="confirm-password">Confirm Password</label>
           <input
                   type="password"
                   id="confirm-password"
+                  v-on:blur="$v.confirmPassword.$touch()"
                   v-model="confirmPassword">
         </div>
         <div class="input">
@@ -75,7 +77,7 @@
 </template>
 
 <script>
-  import { required, email, numeric, minValue } from 'vuelidate/lib/validators'
+  import { required, email, numeric, minValue, minLength, sameAs } from 'vuelidate/lib/validators'
 
   export default {
     data () {
@@ -98,6 +100,14 @@
         required,
         numeric,
         minVal: minValue(18)
+      },
+      password: {
+        required,
+        minLen: minLength(6)
+      },
+      confirmPassword: {
+        // sameAs: sameAs('password')
+        sameAs: sameAs(vm => vm.password)
       }
     },
     methods: {
